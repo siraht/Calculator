@@ -22,6 +22,7 @@
     flex-direction: column;
     width: 98vw;
     height: 98vh;
+    overflow: hidden;
 }
 
 .main {

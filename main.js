@@ -17,7 +17,8 @@ let numberFour
 let numberFive
 let numberSix
 let numberSeven
-let operator
+let currentOperator
+let func2
 results.textContent = currentDisplay
 
 
@@ -44,8 +45,26 @@ const clearAll = () => {
     numberTwo = 0;
 }
 
+const translate = (string) => {
+    switch (string) {
+        case '+':
+            return add;
+        case '-':
+            return subtract;
+        case '*':
+            return multiply;
+        case '/':
+            return divide;
+    }
+}
+
 // Display results functions
 let updateResults = () => { results.textContent = currentDisplay }
+let replaceResults = (item) => { currentDisplay = item.id };
+let addToResults = (item) => { currentDisplay += item.id };
+
+// Operator functions
+
 
 // Create HTMl calculator
 // Create operator buttons
@@ -65,50 +84,133 @@ for (let index = 9; index >= 0; index--) {
     newDiv.id = `${index}`
     newDiv.classList.add('numberButton');
     newDiv.classList.add('button');
-    newDiv.textContent = `${index}`
-    /* newDiv.addEventListener('click', updateDisplay(`${index}`)); */
+    newDiv.textContent = `${index}`;
     numberInput.appendChild(newDiv);
 }
 
 // Add eventListeners to number buttons to update display
-document.querySelectorAll('.numberButton').forEach(item => {
+
+let addNButtonListener = (item) => {
+    item.addEventListener('click', event => {
+        if (currentTotal == currentDisplay) {
+            replaceResults(item);
+            updateResults();
+        } else {
+            addToResults(item);
+            updateResults();
+        }
+
+    })
+}
+
+document.querySelectorAll('.numberButton').forEach(addNButtonListener)
+
+// Add listeners to operator buttons
+
+let addOButtonListener = (item) => {
+    item.addEventListener('click', event => {
+        if (item.id == 'C') {
+            clearAll();
+            updateResults();
+        } else if (item.id == '=') {
+
+        } else {
+
+            if (currentTotal) {
+                currentTotal = Number(currentTotal) + Number(currentDisplay);
+                results.textContent = currentTotal;
+                currentOperator = item.id;
+            } else {
+                currentTotal = Number(currentDisplay);
+                currentOperator = item.id;
+            }
+
+        }
+    })
+}
+
+document.querySelectorAll('.operatorButton').forEach(addOButtonListener);
+
+// Add eventListeners to number buttons to update display
+/* document.querySelectorAll('.numberButton').forEach(item => {
     item.addEventListener('click', event => {
 
         if (!numberOne) {
             if (currentDisplay == 0) {
-                currentDisplay = item.id
+                replaceResults(item);
                 updateResults();
             } else {
-                currentDisplay += item.id;
+                addToResults(item);
                 updateResults();
             }
 
         } else if (numberOne) {
             if (numberOne && currentDisplay == 0) {
-                currentDisplay = item.id
+                replaceResults(item);
                 updateResults();
             } else {
-                currentDisplay += item.id
+                addToResults(item);
                 updateResults();
             }
         }
     })
 })
-
+ */
 // Add listeners to operator buttons
-document.querySelectorAll('.operatorButton').forEach(item => {
+/* document.querySelectorAll('.operatorButton').forEach(item => {
     item.addEventListener('click', event => {
+
         if (item.id == "C") {
             clearAll();
-            results.textContent = currentDisplay;
-        } else {
+            updateResults();
+        } else if (item.id == "=") {
+
+            if (currentDisplay == 0) {
+
+            } else if (currentDisplay && numberOne) {
+                let operatorFunction = translate(currentOperator);
+                currentDisplay = operate(operatorFunction, numberOne, Number(currentDisplay));
+                currentOperator = '';
+                updateResults();
+            } else {
+            }
+        }
+
+        else {
             if (!numberOne) {
                 numberOne = Number(currentDisplay)
                 currentDisplay = 0;
+                currentOperator = item.id;
             } else {
-                numberOne = numberOne;
+                currentDisplay = numberOne;
+                currentOperator = item.id;
+                numberOne = 0;
             }
 
         }
     })
-})
+}) */
+
+/* document.querySelectorAll('.numberButton').forEach(item => {
+    item.addEventListener('click', event => {
+
+        if (!numberOne) {
+            if (currentDisplay == 0) {
+                replaceResults(item);
+                updateResults();
+            } else {
+                addToResults(item);
+                updateResults();
+            }
+
+        } else if (numberOne) {
+            if (numberOne && currentDisplay == 0) {
+                replaceResults(item);
+                updateResults();
+            } else {
+                addToResults(item);
+                updateResults();
+            }
+        }
+    })
+}) */
