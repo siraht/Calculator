@@ -24,7 +24,7 @@ let lastButtonClicked
 results.textContent = currentDisplay
 
 
-// Evaluation functions
+// Evaluation functionality
 const add = (num, num2) => {
     return num + num2;
 }
@@ -74,7 +74,7 @@ const translate = (string) => {
     }
 }
 
-// Display results functions
+// Display update functionality
 let updateResults = () => { results.textContent = currentDisplay }
 let replaceResults = (item) => { currentDisplay = item.id };
 let addToResults = (item) => { currentDisplay += item.id };
@@ -84,8 +84,12 @@ lastClickWasOperator = () => {
     lastButtonClicked = 'operator';
 }
 
-setCurrentOperator = (id) => {
-    currentOperator = id;
+lastClickWasNumber = () => {
+    lastButtonClicked = 'number';
+}
+
+setCurrentOperator = (obj) => {
+    currentOperator = obj;
 }
 
 
@@ -111,8 +115,7 @@ for (let index = 9; index >= 0; index--) {
     numberInput.appendChild(newDiv);
 }
 
-// Add eventListeners to number buttons to update display
-
+// Number button functionality
 let addNumberListener = (item) => {
     item.addEventListener('click', event => {
         if (currentDisplay == 0) {
@@ -127,24 +130,16 @@ let addNumberListener = (item) => {
             replaceResults(item);
             updateResults();
         }
-        /* if (currentTotal == currentDisplay) {
-            replaceResults(item);
-            updateResults();
-        } else {
-            addToResults(item);
-            updateResults();
-        } */
-        lastButtonClicked = 'number';
+        lastClickWasNumber();
     })
 }
 
 document.querySelectorAll('.numberButton').forEach(addNumberListener)
 
-// Add listeners to operator buttons
-
+// Operator button functionality
 let addOperatorListener = (item) => {
     item.addEventListener('click', event => {
-        let operator = translate(item.id);
+        let operator;
         if (item.id == 'C') {
             clearAll();
         } else if (item.id == '=') {
@@ -154,6 +149,7 @@ let addOperatorListener = (item) => {
                 setCurrentOperator(item.id);
             } else {
                 if (currentTotal) {
+                    operator = translate(currentOperator);
                     currentTotal = operator(Number(currentTotal), Number(currentDisplay));
                     setCurrentOperator(item.id);
                     results.textContent = currentTotal;
@@ -168,87 +164,3 @@ let addOperatorListener = (item) => {
 }
 
 document.querySelectorAll('.operatorButton').forEach(addOperatorListener);
-
-// Add eventListeners to number buttons to update display
-/* document.querySelectorAll('.numberButton').forEach(item => {
-    item.addEventListener('click', event => {
-
-        if (!numberOne) {
-            if (currentDisplay == 0) {
-                replaceResults(item);
-                updateResults();
-            } else {
-                addToResults(item);
-                updateResults();
-            }
-
-        } else if (numberOne) {
-            if (numberOne && currentDisplay == 0) {
-                replaceResults(item);
-                updateResults();
-            } else {
-                addToResults(item);
-                updateResults();
-            }
-        }
-    })
-})
- */
-// Add listeners to operator buttons
-/* document.querySelectorAll('.operatorButton').forEach(item => {
-    item.addEventListener('click', event => {
-
-        if (item.id == "C") {
-            clearAll();
-            updateResults();
-        } else if (item.id == "=") {
-
-            if (currentDisplay == 0) {
-
-            } else if (currentDisplay && numberOne) {
-                let operatorFunction = translate(currentOperator);
-                currentDisplay = operate(operatorFunction, numberOne, Number(currentDisplay));
-                currentOperator = '';
-                updateResults();
-            } else {
-            }
-        }
-
-        else {
-            if (!numberOne) {
-                numberOne = Number(currentDisplay)
-                currentDisplay = 0;
-                currentOperator = item.id;
-            } else {
-                currentDisplay = numberOne;
-                currentOperator = item.id;
-                numberOne = 0;
-            }
-
-        }
-    })
-}) */
-
-/* document.querySelectorAll('.numberButton').forEach(item => {
-    item.addEventListener('click', event => {
-
-        if (!numberOne) {
-            if (currentDisplay == 0) {
-                replaceResults(item);
-                updateResults();
-            } else {
-                addToResults(item);
-                updateResults();
-            }
-
-        } else if (numberOne) {
-            if (numberOne && currentDisplay == 0) {
-                replaceResults(item);
-                updateResults();
-            } else {
-                addToResults(item);
-                updateResults();
-            }
-        }
-    })
-}) */
