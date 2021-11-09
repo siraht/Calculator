@@ -10,18 +10,16 @@ const results = document.querySelector('.results');
 // Setting global variables
 let currentDisplay = 0;
 let currentTotal = 0;
-let numberOne
-let numberTwo
-let numberThree
-let numberFour
-let numberFive
-let numberSix
-let numberSeven
 let currentOperator
-let func2
 let operationNumber = 0;
 let lastButtonClicked
-results.textContent = currentDisplay
+
+// Display update functionality
+let updateResults = () => { results.textContent = currentDisplay }
+let replaceResults = (item) => { currentDisplay = item.id };
+let addToResults = (item) => { currentDisplay += item.id };
+
+updateResults();
 
 
 // Evaluation functionality
@@ -74,12 +72,7 @@ const translate = (string) => {
     }
 }
 
-// Display update functionality
-let updateResults = () => { results.textContent = currentDisplay }
-let replaceResults = (item) => { currentDisplay = item.id };
-let addToResults = (item) => { currentDisplay += item.id };
-
-// Operator functions
+// Miscellaneous functionality
 lastClickWasOperator = () => {
     lastButtonClicked = 'operator';
 }
@@ -93,7 +86,6 @@ setCurrentOperator = (obj) => {
 }
 
 
-// Create HTMl calculator
 // Create operator buttons
 const operatorsArray = ['+', '-', '*', '/', '=', 'C'];
 for (let i = 0; i < 6; i++) {
@@ -118,11 +110,7 @@ for (let index = 9; index >= 0; index--) {
 // Number button functionality
 let addNumberListener = (item) => {
     item.addEventListener('click', event => {
-        if (currentDisplay == 0) {
-            replaceResults(item);
-            updateResults();
-        }
-        else if (lastButtonClicked == 'number') {
+        if (lastButtonClicked == 'number') {
             addToResults(item);
             updateResults();
         }
@@ -139,7 +127,6 @@ document.querySelectorAll('.numberButton').forEach(addNumberListener)
 // Operator button functionality
 let addOperatorListener = (item) => {
     item.addEventListener('click', event => {
-        let operator;
         if (item.id == 'C') {
             clearAll();
         } else if (item.id == '=') {
@@ -149,7 +136,7 @@ let addOperatorListener = (item) => {
                 setCurrentOperator(item.id);
             } else {
                 if (currentTotal) {
-                    operator = translate(currentOperator);
+                    let operator = translate(currentOperator);
                     currentTotal = operator(Number(currentTotal), Number(currentDisplay));
                     setCurrentOperator(item.id);
                     results.textContent = currentTotal;
