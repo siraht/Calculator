@@ -13,6 +13,7 @@ let currentTotal = 0;
 let currentOperator
 let operationNumber = 0;
 let lastButtonClicked
+let snarkyMessages = ['Nice try!', 'OMG NO!!!', 'wut', `No Uncle Cracker`]
 
 // Display update functionality
 let updateResults = () => { results.textContent = currentDisplay }
@@ -21,6 +22,25 @@ let addToResults = (item) => { currentDisplay += item.id };
 
 updateResults();
 
+// Miscellaneous functionality
+lastClickWasOperator = () => {
+    lastButtonClicked = 'operator';
+}
+
+lastClickWasNumber = () => {
+    lastButtonClicked = 'number';
+}
+
+setCurrentOperator = (obj) => {
+    currentOperator = obj;
+}
+
+numberForMessages = () => {
+    num = Math.floor(Math.random() * (snarkyMessages.length))
+    return num;
+}
+
+const roundAccurately = (number, decimalPlaces) => Number(Math.round(number + "e" + decimalPlaces) + "e-" + decimalPlaces)
 
 // Evaluation functionality
 const add = (num, num2) => {
@@ -53,10 +73,15 @@ const clearAll = () => {
 }
 
 const equals = () => {
-    currentTotal = operate(translate(currentOperator), Number(currentTotal), Number(currentDisplay));
-    results.textContent = currentTotal;
-    operationNumber = 0;
-    lastClickWasOperator();
+    currentTotal = roundAccurately(operate(translate(currentOperator), Number(currentTotal), Number(currentDisplay)), 10);
+    if (currentTotal == Infinity || isNaN(currentTotal)) {
+        results.textContent = snarkyMessages[numberForMessages()];
+        currentTotal = 0;
+    } else {
+        results.textContent = currentTotal;
+        operationNumber = 0;
+        lastClickWasOperator();
+    }
 }
 
 const translate = (string) => {
@@ -71,20 +96,6 @@ const translate = (string) => {
             return divide;
     }
 }
-
-// Miscellaneous functionality
-lastClickWasOperator = () => {
-    lastButtonClicked = 'operator';
-}
-
-lastClickWasNumber = () => {
-    lastButtonClicked = 'number';
-}
-
-setCurrentOperator = (obj) => {
-    currentOperator = obj;
-}
-
 
 // Create operator buttons
 const operatorsArray = ['+', '-', '*', '/', '=', 'C'];
@@ -137,7 +148,7 @@ let addOperatorListener = (item) => {
             } else {
                 if (currentTotal) {
                     let operator = translate(currentOperator);
-                    currentTotal = operator(Number(currentTotal), Number(currentDisplay));
+                    currentTotal = roundAccurately(operator(Number(currentTotal), Number(currentDisplay)), 10);
                     setCurrentOperator(item.id);
                     results.textContent = currentTotal;
                 } else {

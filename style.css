@@ -1,3 +1,9 @@
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .nav {
     max-height: 5vh;
     min-height: 2vh;
@@ -6,7 +12,10 @@
 }
 
 .header {
-
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
 }
 
 .header h2 {
@@ -15,6 +24,10 @@
 
 .footer {
     margin-top: auto;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
 }
 
 .body {
@@ -44,6 +57,7 @@
     display: flex;
     flex-direction: column;
     border-radius: 20px;
+    box-shadow: 0px 0px 50px -20px;
 }
 
 .resultsContainer {
@@ -70,6 +84,11 @@
     flex-grow: 8;
     display: flex;
     flex-direction: row;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .numberInput {
