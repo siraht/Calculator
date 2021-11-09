@@ -19,6 +19,7 @@ let numberSix
 let numberSeven
 let currentOperator
 let func2
+let operationNumber = 0;
 results.textContent = currentDisplay
 
 
@@ -43,6 +44,8 @@ const clearAll = () => {
     currentTotal = 0;
     numberOne = 0;
     numberTwo = 0;
+    operator = '';
+    operationNumber = 0;
 }
 
 const translate = (string) => {
@@ -90,7 +93,7 @@ for (let index = 9; index >= 0; index--) {
 
 // Add eventListeners to number buttons to update display
 
-let addNButtonListener = (item) => {
+let addNumberListener = (item) => {
     item.addEventListener('click', event => {
         if (currentTotal == currentDisplay) {
             replaceResults(item);
@@ -103,23 +106,31 @@ let addNButtonListener = (item) => {
     })
 }
 
-document.querySelectorAll('.numberButton').forEach(addNButtonListener)
+document.querySelectorAll('.numberButton').forEach(addNumberListener)
 
 // Add listeners to operator buttons
 
-let addOButtonListener = (item) => {
+let addOperatorListener = (item) => {
     item.addEventListener('click', event => {
+        let operator = translate(item.id);
         if (item.id == 'C') {
             clearAll();
             updateResults();
         } else if (item.id == '=') {
-
+            currentTotal = operate(translate(currentOperator), Number(currentTotal), Number(currentDisplay));
+            results.textContent = currentTotal;
+            operationNumber = 0;
         } else {
-
+            operationNumber += 1;
             if (currentTotal) {
-                currentTotal = Number(currentTotal) + Number(currentDisplay);
-                results.textContent = currentTotal;
+                if (operationNumber >= 1) {
+
+                } else {
+
+                }
                 currentOperator = item.id;
+                currentTotal = operator(Number(currentTotal), Number(currentDisplay));
+                results.textContent = currentTotal;
             } else {
                 currentTotal = Number(currentDisplay);
                 currentOperator = item.id;
@@ -129,7 +140,7 @@ let addOButtonListener = (item) => {
     })
 }
 
-document.querySelectorAll('.operatorButton').forEach(addOButtonListener);
+document.querySelectorAll('.operatorButton').forEach(addOperatorListener);
 
 // Add eventListeners to number buttons to update display
 /* document.querySelectorAll('.numberButton').forEach(item => {
