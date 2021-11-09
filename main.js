@@ -20,6 +20,7 @@ let numberSeven
 let currentOperator
 let func2
 let operationNumber = 0;
+let lastButtonClicked
 results.textContent = currentDisplay
 
 
@@ -39,6 +40,7 @@ const divide = (num, num2) => {
 const operate = (func, num, num2) => {
     return func(num, num2)
 }
+
 const clearAll = () => {
     currentDisplay = 0;
     currentTotal = 0;
@@ -46,6 +48,17 @@ const clearAll = () => {
     numberTwo = 0;
     operator = '';
     operationNumber = 0;
+    lastButtonClicked = '';
+    currentOperator = '';
+    updateResults();
+    lastClickWasOperator();
+}
+
+const equals = () => {
+    currentTotal = operate(translate(currentOperator), Number(currentTotal), Number(currentDisplay));
+    results.textContent = currentTotal;
+    operationNumber = 0;
+    lastClickWasOperator();
 }
 
 const translate = (string) => {
@@ -67,6 +80,13 @@ let replaceResults = (item) => { currentDisplay = item.id };
 let addToResults = (item) => { currentDisplay += item.id };
 
 // Operator functions
+lastClickWasOperator = () => {
+    lastButtonClicked = 'operator';
+}
+
+setCurrentOperator = (id) => {
+    currentOperator = id;
+}
 
 
 // Create HTMl calculator
@@ -95,14 +115,26 @@ for (let index = 9; index >= 0; index--) {
 
 let addNumberListener = (item) => {
     item.addEventListener('click', event => {
-        if (currentTotal == currentDisplay) {
+        if (currentDisplay == 0) {
+            replaceResults(item);
+            updateResults();
+        }
+        else if (lastButtonClicked == 'number') {
+            addToResults(item);
+            updateResults();
+        }
+        else {
+            replaceResults(item);
+            updateResults();
+        }
+        /* if (currentTotal == currentDisplay) {
             replaceResults(item);
             updateResults();
         } else {
             addToResults(item);
             updateResults();
-        }
-
+        } */
+        lastButtonClicked = 'number';
     })
 }
 
@@ -115,27 +147,22 @@ let addOperatorListener = (item) => {
         let operator = translate(item.id);
         if (item.id == 'C') {
             clearAll();
-            updateResults();
         } else if (item.id == '=') {
-            currentTotal = operate(translate(currentOperator), Number(currentTotal), Number(currentDisplay));
-            results.textContent = currentTotal;
-            operationNumber = 0;
+            equals();
         } else {
-            operationNumber += 1;
-            if (currentTotal) {
-                if (operationNumber >= 1) {
-
-                } else {
-
-                }
-                currentOperator = item.id;
-                currentTotal = operator(Number(currentTotal), Number(currentDisplay));
-                results.textContent = currentTotal;
+            if (lastButtonClicked == 'operator') {
+                setCurrentOperator(item.id);
             } else {
-                currentTotal = Number(currentDisplay);
-                currentOperator = item.id;
+                if (currentTotal) {
+                    currentTotal = operator(Number(currentTotal), Number(currentDisplay));
+                    setCurrentOperator(item.id);
+                    results.textContent = currentTotal;
+                } else {
+                    currentTotal = Number(currentDisplay);
+                    setCurrentOperator(item.id);
+                }
+                lastClickWasOperator();
             }
-
         }
     })
 }
