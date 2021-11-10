@@ -1,7 +1,6 @@
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 .nav {
@@ -12,9 +11,9 @@
 }
 
 .header {
-    position: absolute;
+    /* position: absolute;
     top: 0px;
-    left: 0px;
+    left: 0px; */
     width: 100%;
 }
 
@@ -24,18 +23,19 @@
 
 .footer {
     margin-top: auto;
-    position: absolute;
+    /* position: absolute;
     bottom: 0px;
-    left: 0px;
+    left: 0px; */
     width: 100%;
 }
 
 .body {
     display: flex;
     flex-direction: column;
-    width: 98vw;
-    height: 98vh;
+    height: 100%;
     overflow: hidden;
+    /* margin: 0; */
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .main {
